@@ -24,6 +24,27 @@ html {
      max-width: 56rem;
  }
 
+.album-song-button {
+    text-align: center;
+    font-size: 14px;
+    background-color: white;
+    color: rgb(210, 40, 123);
+    border-radius: 50% 50%;
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+}
+
+.album-song-button:hover {
+    cursor: pointer;
+    color: white;
+    background-color: rgb(210, 40, 123);
+}
+
+.album-song-button span {
+    line-height: 28px;
+}
+
  /* Medium screens (640px) */
  /* min-width is the querie/constraine. 640px is the breakpoint for a laptop. Breakpoint refers to the measurement of a devices screen width. */
  /* rem is usually 16px for most of the browsers. Set the font size to be more than 112% of rem-16px. */
