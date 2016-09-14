@@ -84,9 +84,19 @@ var createSongRow = function(songNumber, songName, songLength) {
  };
 
 var findParentByClassName = function (element, className) {
+    var elem = element;
+    if (element.parentElement == null) {
+        alert("This element - " + elem.nodeName + " does not have any parent");
+        return element;
+    }
     while (element.className != className && element.className != null) {
         //console.log(element.className); //for debug
         element = element.parentElement;
+    
+        if (element == null) {
+            alert("Did not find a parent for the element - " + elem.nodeName + " having the class name " + className);
+            return element;
+        }
     }
     return element;
 };      
@@ -178,7 +188,9 @@ window.onload = function() {
          });
     }
     
-    var elemParent = findParentByClassName(songRows[0].children[0], 'album-view-song-list');    
+    //For debug of findParentByClassName function
+    var elemParent = findParentByClassName(document.getElementsByTagName("html")[0], 'album-view-song-list');    
+    //var elemParent = findParentByClassName(document.getElementsByClassName("album")[0], 'album-view-song-list');    
     
     var albums = [albumPicasso, albumAdele, albumMarconi];
     var index = 1;
