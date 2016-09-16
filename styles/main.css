@@ -68,7 +68,7 @@ html {
  }
 
  /* Large screens (1024px) */
- /* rem is usually 16px for most of the browsers. Set the font size to be more than 112% of rem-16px. */
+ /* rem is usually 16px for most of the browsers. Set the font size to be more than 120% of rem-16px. */
 
  @media (min-width: 1024px) {
      html { font-size: 120%; } 
