@@ -1,5 +1,5 @@
-function foreach (arr, funcToPerform) {
-    for (var i=0; i<arr.length; i++) {
-        funcToPerform(i);           
+function forEach (array, callBack) {
+    for (var i=0; i<array.length; i++) {
+        callBack(array[i]);           
     }
 }
