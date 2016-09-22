@@ -55,7 +55,8 @@ var createSongRow = function(songNumber, songName, songLength) {
         
        // console.log("songNumber type is " + typeof songNumber + "\n and currentlyPlayingSongNumber type is " + typeof currentlyPlayingSongNumber);
 
-        if (songNumber !== currentlyPlayingSongNumber) {
+        if (songNumber != currentlyPlayingSongNumber) {
+                  
             songNumberCell.html(songNumber);
         } 
     };
@@ -101,12 +102,20 @@ var createSongRow = function(songNumber, songName, songLength) {
     Update the song element with pause button and the previous song element with the song number
     
 */
+
 var nextSong = function () {
+    var next;
+    
+    $(this).hasClass('next') === true ? next = 1 : next = 0;
     
     //This variable takes care of returning the last song of the album.
     //If the index is 0, it means the previous song was last song in the album.
     var getLastSongNumber = function(index) {
-        return index == 0 ? currentAlbum.songs.length : index;
+        if (next == 1) {
+          return index == 0 ? currentAlbum.songs.length : index;
+        } else {
+           return index == (currentAlbum.songs.length - 1) ? 1 : index + 2; 
+        }
     };
     
     //Get the currently playing song index. The index will range from -1 to the last song index.
@@ -115,24 +124,27 @@ var nextSong = function () {
     //The currentAlbum holds the album along with the list of songs and the currentSongFromAlbum holds the song being played.
     
     var currentSongIndex = trackIndex(currentAlbum, currentSongFromAlbum);
-    // Note that we're _incrementing_ the song here
-    currentSongIndex++;
+    
+    next == 1 ? currentSongIndex++ : currentSongIndex--;
         
     //If we reach the last song in the album, then wrap around to the first song.
-    if (currentSongIndex >= currentAlbum.songs.length) {
-        currentSongIndex = 0;
+    if (next == 1) {
+        if (currentSongIndex >= currentAlbum.songs.length) {
+            currentSongIndex = 0;
+        }
+    } else {
+        if (currentSongIndex < 0) {
+            currentSongIndex = currentAlbum.songs.length - 1;
+        }
     }
     
     // Set a new current song
-    
     setSong(currentSongIndex + 1);
-    //currentlyPlayingSongNumber = currentSongIndex + 1;
-    //currentSongFromAlbum = currentAlbum.songs[currentSongIndex];
-
+    
     // Update the Player Bar information
     updatePlayerBarSong();
     
-    var lastSongNumber = getLastSongNumber(currentSongIndex);
+    var lastSongNumber      = getLastSongNumber(currentSongIndex);
     var $nextSongNumberCell = getSongNumberCell(currentlyPlayingSongNumber);
     var $lastSongNumberCell = getSongNumberCell(lastSongNumber);
     
@@ -140,37 +152,6 @@ var nextSong = function () {
     $lastSongNumberCell.html(lastSongNumber);
     
     
-};
-
-var previousSong = function () {
-    // Note the difference between this implementation and the one in
-    // nextSong()
-    var getLastSongNumber = function(index) {
-        return index == (currentAlbum.songs.length - 1) ? 1 : index + 2;
-    };
-    
-    var currentSongIndex = trackIndex(currentAlbum, currentSongFromAlbum);
-    // Note that we're _decrementing_ the index here
-    currentSongIndex--;
-    
-    if (currentSongIndex < 0) {
-        currentSongIndex = currentAlbum.songs.length - 1;
-    }
-    
-    // Set a new current song
-    setSong(currentSongIndex + 1);
-    //currentlyPlayingSongNumber = currentSongIndex + 1;
-    //currentSongFromAlbum = currentAlbum.songs[currentSongIndex];
-
-    // Update the Player Bar information
-    updatePlayerBarSong();
-    
-    var lastSongNumber = getLastSongNumber(currentSongIndex);
-    var $previousSongNumberCell = getSongNumberCell(currentlyPlayingSongNumber);
-    var $lastSongNumberCell = getSongNumberCell(lastSongNumber);
-    
-    $previousSongNumberCell.html(pauseButtonTemplate);
-    $lastSongNumberCell.html(lastSongNumber);    
 };
 
 var setSong = function (songN) {
@@ -222,8 +203,9 @@ $(document).ready( function() {
             index = 0;
         }
     });
-
-    $previousButton.click(previousSong);
+    
+    //Same Click Handler for next & previous button.
+    $previousButton.click(nextSong);
     $nextButton.click(nextSong);
     
 });
