@@ -100,7 +100,7 @@ var createSongRow = function(songNumber, songName, songLength) {
  
      // #4
      for (var i = 0; i < album.songs.length; i++) {
-         var $newRow = createSongRow(i + 1, album.songs[i].title, album.songs[i].duration);
+         var $newRow = createSongRow(i + 1, album.songs[i].title, filterTimeCode(album.songs[i].duration));
          $albumSongList.append($newRow);
      }
  };
@@ -144,7 +144,7 @@ var setupSeekBars = function() {
          var barWidth = $seekBar.width();
          var seekBarFillRatio = offsetX / barWidth;
              
-         ($(seekBar).parent().attr('class') == 'seek-control') ? seek(seekBarFillRatio * currentSoundFile.getDuration()) : setVolume(seekBarFillRatio);
+         ($seekBar.parent().attr('class') == 'seek-control') ? seek(seekBarFillRatio * currentSoundFile.getDuration()) : setVolume(seekBarFillRatio);
          
          updateSeekPercentage($seekBar, seekBarFillRatio);
      });
@@ -168,6 +168,7 @@ var updateSeekBarWhileSongPlays = function() {
              var $seekBar = $('.seek-control .seek-bar');
  
              updateSeekPercentage($seekBar, seekBarFillRatio);
+             setCurrentTimeInPlayerBar(filterTimeCode(this.getTime()));
          });
      }
  };
@@ -306,13 +307,27 @@ var trackIndex = function(album, song) {
  };
 
 var updatePlayerBarSong = function () {
-        
+    setTotalTimeInPlayerBar((filterTimeCode(currentSongFromAlbum.duration)));    
     $('.currently-playing .song-name').text(currentSongFromAlbum.title);    
     $('.currently-playing .artist-song-mobile').text(currentSongFromAlbum.title + " - " + currentAlbum.artist);
     $('.currently-playing .artist-name').text(currentAlbum.artist);
     $('.main-controls .play-pause').html(playerBarPauseButton);
 };
     
+var setCurrentTimeInPlayerBar = function (currentTime) {
+  $('.current-time').text(currentTime);    
+};
+
+var setTotalTimeInPlayerBar = function (totalTime) {
+    $('.total-time').text(totalTime);
+};
+
+var filterTimeCode = function (timeInSeconds) {
+    var timeNum = parseFloat(timeInSeconds);
+    var displayTime = timeNum/60; 
+    return displayTime.toFixed(2);
+};
+
 // Album button templates
 var playButtonTemplate = '<a class="album-song-button"><span class="ion-play"></span></a>';
 var pauseButtonTemplate = '<a class="album-song-button"><span class="ion-pause"></span></a>';
